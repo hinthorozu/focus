@@ -3,6 +3,7 @@ import 'package:focus/widgets/my_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:focus/config/my_colors.dart';
 import 'package:focus/widgets/drawer.dart';
+import 'package:screen/screen.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -71,6 +72,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     super.initState();
     _start = is25Minute ? min_25 : min_5;
     startTimer();
+    Screen.keepOn(true);
   }
 
   @override
