@@ -1,0 +1,5 @@
+Dinlenme süresini +5 +5 olarak toplam 15 dakikaya çıkartabilsin.
+1. Arka plan müziklerini seçebileceksin
+
+https://splode.github.io/pomotroid/
+https://play.google.com/store/apps/details?id=com.engross
