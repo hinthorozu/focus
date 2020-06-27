@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage> {
                         return Text(
                           '$minutesStr:$secondsStr',
                           style: TextStyle(
-                              color: is25Minute
+                              color: !is25Minute
                                   ? Theme.of(context).primaryColor
                                   : MyColors.yellowOwn,
                               fontSize: 96.0),
