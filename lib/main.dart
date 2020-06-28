@@ -6,11 +6,13 @@ import 'package:focus/ui/home.dart';
 import 'package:focus/widgets/my_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
   runApp(MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: myTheme,
@@ -18,6 +20,16 @@ void main() async {
       routes: {
         '/home': (BuildContext context) => new HomePage(),
       }));
+
+  SharedPreferences.getInstance().then((prefs) {
+    runApp(MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: myTheme,
+        home: SplashScreen(),
+        routes: {
+          '/home': (BuildContext context) => new HomePage(prefs: prefs),
+        }));
+  });
 }
 
 class SplashScreen extends StatefulWidget {
@@ -40,7 +52,6 @@ class SplashScreenState extends State<SplashScreen> {
     super.initState();
     // SQLiteDb dbHelper = SQLiteDb();
     // dbHelper.init();
-
     startTime();
   }
 

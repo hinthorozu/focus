@@ -7,6 +7,7 @@ import 'package:focus/widgets/drawer.dart';
 import 'package:screen/screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+bool isMinute = true;
 int min_25 = 1500;
 int min_5 = 300;
 
@@ -25,9 +26,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     Screen.keepOn(true);
-    setState(() {
-      widget.prefs.setInt('isMinute', 1500);
-    });
+    widget.prefs.setBool("isMinute", false);
   }
 
   @override
@@ -40,7 +39,7 @@ class _HomePageState extends State<HomePage> {
     return BlocProvider(
       create: (context) => TimerBloc(
           ticker: Ticker(),
-          duration: widget.prefs.getInt('isMinute') == 1500 ? min_25 : min_5),
+          duration: widget.prefs.getBool("isMinute") ? min_25 : min_5),
       child: Scaffold(
         key: _scaffoldStateKey,
         appBar: AppBar(
@@ -78,7 +77,7 @@ class _HomePageState extends State<HomePage> {
                         return Text(
                           '$minutesStr:$secondsStr',
                           style: TextStyle(
-                              color: widget.prefs.getInt('isMinute') != 1500
+                              color: widget.prefs.getBool("isMinute")
                                   ? Theme.of(context).primaryColor
                                   : MyColors.yellowOwn,
                               fontSize: 96.0),
@@ -124,11 +123,13 @@ class _ActionsState extends State<Actions> {
     final TimerState currentState = timerBloc.state;
     if (currentState is StateInitial) {
       return [
-        FloatingActionButton(
-            child: Icon(Icons.play_arrow),
+        FloatingActionButton.extended(
+            label: Text(
+                widget.prefs.getBool("isMinute") ? "Fokuslan" : "Mola Ver"),
+            icon: Icon(Icons.play_arrow),
             onPressed: () {
-              timerBloc
-                  .add(EventStarted(duration: widget.prefs.getInt('isMinute')));
+              timerBloc.add(EventStarted(
+                  duration: widget.prefs.getBool("isMinute") ? min_25 : min_5));
             }),
       ];
     }
@@ -140,21 +141,19 @@ class _ActionsState extends State<Actions> {
         ),
         FloatingActionButton(
           child: Icon(Icons.replay),
-          onPressed: () => timerBloc
-              .add(EventReset(duration: widget.prefs.getInt('isMinute'))),
+          onPressed: () => timerBloc.add(EventReset(
+              duration: widget.prefs.getBool("isMinute") ? min_25 : min_5)),
         ),
         FloatingActionButton.extended(
-            label: Text(widget.prefs.getInt('isMinute') == 1500
-                ? "Fokuslan"
-                : "Mola Ver"),
+            label: Text(
+                widget.prefs.getBool("isMinute") ? "Fokuslan" : "Mola Ver"),
             onPressed: () {
-              timerBloc
-                  .add(EventStarted(duration: widget.prefs.getInt('isMinute')));
+              timerBloc.add(EventStarted(
+                  duration: widget.prefs.getBool("isMinute") ? min_25 : min_5));
               setState(() {
-                print(widget.prefs.getInt('isMinute').toString());
-                widget.prefs.getInt('isMinute') == 1500
-                    ? widget.prefs.setInt('isMinute', min_5)
-                    : widget.prefs.setInt('isMinute', min_25);
+                widget.prefs.getBool("isMinute")
+                    ? widget.prefs.setBool("isMinute", false)
+                    : widget.prefs.setBool("isMinute", true);
               });
             }),
       ];
@@ -167,8 +166,8 @@ class _ActionsState extends State<Actions> {
         ),
         FloatingActionButton(
           child: Icon(Icons.replay),
-          onPressed: () => timerBloc
-              .add(EventReset(duration: widget.prefs.getInt('isMinute'))),
+          onPressed: () => timerBloc.add(EventReset(
+              duration: widget.prefs.getBool("isMinute") ? min_25 : min_5)),
         ),
       ];
     }
@@ -176,8 +175,8 @@ class _ActionsState extends State<Actions> {
       return [
         FloatingActionButton(
           child: Icon(Icons.replay),
-          onPressed: () => timerBloc
-              .add(EventReset(duration: widget.prefs.getInt('isMinute'))),
+          onPressed: () => timerBloc.add(EventReset(
+              duration: widget.prefs.getBool("isMinute") ? min_25 : min_5)),
         ),
       ];
     }

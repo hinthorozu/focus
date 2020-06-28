@@ -73,7 +73,7 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
 
   Stream<TimerState> _mapTimerResetToState(EventReset reset) async* {
     _tickerSubscription?.cancel();
-    yield StateInitial(duration);
+    yield StateInitial(reset.duration);
   }
 
   Stream<TimerState> _mapTimerTickedToState(EventTicked tick) async* {
