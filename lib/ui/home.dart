@@ -1,11 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:focus/bloc/timer_bloc.dart';
-import 'package:focus/config/my_colors.dart';
-import 'package:flutter/material.dart';
-import 'package:focus/utils/ticker.dart';
-import 'package:focus/widgets/drawer.dart';
 import 'package:screen/screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/material.dart';
+import 'package:focus/bloc/timer_bloc.dart';
+import 'package:focus/config/my_colors.dart';
+import 'package:focus/utils/ticker.dart';
+import 'package:focus/widgets/drawer.dart';
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 int min_25 = 1500;
 int min_5 = 300;
@@ -20,7 +22,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   GlobalKey<ScaffoldState> _scaffoldStateKey = GlobalKey<ScaffoldState>();
-
+  final String pomodorobreakStart = "sound/pomodoro_break_start.mp3";
+  static AudioCache cache = new AudioCache();
+  static AudioPlayer player = AudioPlayer();
   @override
   void initState() {
     super.initState();
@@ -33,6 +37,35 @@ class _HomePageState extends State<HomePage> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  void _playFile() async {
+    player = await cache.loop(pomodorobreakStart); // assign player here
+  }
+
+  onSelectNotification() {
+    _playFile();
+    showDialog(
+      context: context,
+      builder: (_) => new AlertDialog(
+        title: new Text('Notification'),
+        content: new Text('Desc'),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('Durdur'),
+            onPressed: () {
+              player?.stop();
+            },
+          ),
+          FlatButton(
+            child: Text('Approve'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   @override
