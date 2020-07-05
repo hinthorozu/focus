@@ -29,7 +29,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     controller = animationController(pomodoroMinute);
   }
 
-
   AnimationController animationController(int pomodoroMinute) {
     return AnimationController(
       vsync: this,
@@ -45,6 +44,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     }
     return '${duration.inMinutes.toString().padLeft(2, '0')}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}';
   }
+
   void _playFile() async {
     player = await cache.loop(pomodorobreakStart); // assign player here
   }
@@ -175,7 +175,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           setState(() {
                             isPlaying = true;
                             controller = animationController(pomodoroMinute);
-                            isPomodoro=true;
+                            isPomodoro = true;
                           });
                           if (controller.isAnimating) {
                             controller.stop(canceled: true);

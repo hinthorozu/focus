@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         key: _scaffoldStateKey,
         appBar: AppBar(
-          title: Text('Flutter Timer'),
+          title: Text('Odaklan!'),
           leading: IconButton(
             icon: Icon(Icons.menu, color: MyColors.grey_10),
             onPressed: () {
@@ -170,6 +170,20 @@ class _ActionsState extends State<Actions> {
           onPressed: () => timerBloc
               .add(EventReset(duration: widget.prefs.getInt('isMinute'))),
         ),
+        FloatingActionButton.extended(
+            label: Text(widget.prefs.getInt('isMinute') == 1500
+                ? "Fokuslan"
+                : "Mola Ver"),
+            onPressed: () {
+              timerBloc
+                  .add(EventStarted(duration: widget.prefs.getInt('isMinute')));
+              setState(() {
+                print(widget.prefs.getInt('isMinute').toString());
+                widget.prefs.getInt('isMinute') == 1500
+                    ? widget.prefs.setInt('isMinute', min_5)
+                    : widget.prefs.setInt('isMinute', min_25);
+              });
+            }),
       ];
     }
     if (currentState is StateComplete) {
@@ -179,6 +193,20 @@ class _ActionsState extends State<Actions> {
           onPressed: () => timerBloc
               .add(EventReset(duration: widget.prefs.getInt('isMinute'))),
         ),
+        FloatingActionButton.extended(
+            label: Text(widget.prefs.getInt('isMinute') == 1500
+                ? "Fokuslan"
+                : "Mola Ver"),
+            onPressed: () {
+              timerBloc
+                  .add(EventStarted(duration: widget.prefs.getInt('isMinute')));
+              setState(() {
+                print(widget.prefs.getInt('isMinute').toString());
+                widget.prefs.getInt('isMinute') == 1500
+                    ? widget.prefs.setInt('isMinute', min_5)
+                    : widget.prefs.setInt('isMinute', min_25);
+              });
+            }),
       ];
     }
     return [];
