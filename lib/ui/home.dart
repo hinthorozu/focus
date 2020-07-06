@@ -6,11 +6,9 @@ import 'package:focus/bloc/timer_bloc.dart';
 import 'package:focus/config/my_colors.dart';
 import 'package:focus/utils/ticker.dart';
 import 'package:focus/widgets/drawer.dart';
-import 'package:audioplayers/audio_cache.dart';
-import 'package:audioplayers/audioplayers.dart';
 
-int min_25 = 1500;
-int min_5 = 300;
+int min_25 = 15;
+int min_5 = 3;
 
 class HomePage extends StatefulWidget {
   final SharedPreferences prefs;
@@ -22,15 +20,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   GlobalKey<ScaffoldState> _scaffoldStateKey = GlobalKey<ScaffoldState>();
-  final String pomodorobreakStart = "sound/pomodoro_break_start.mp3";
-  static AudioCache cache = new AudioCache();
-  static AudioPlayer player = AudioPlayer();
   @override
   void initState() {
     super.initState();
     Screen.keepOn(true);
     setState(() {
-      widget.prefs.setInt('isMinute', 1500);
+      widget.prefs.setInt('isMinute', 15);
     });
   }
 
@@ -39,45 +34,16 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  void _playFile() async {
-    player = await cache.loop(pomodorobreakStart); // assign player here
-  }
-
-  onSelectNotification() {
-    _playFile();
-    showDialog(
-      context: context,
-      builder: (_) => new AlertDialog(
-        title: new Text('Notification'),
-        content: new Text('Desc'),
-        actions: <Widget>[
-          FlatButton(
-            child: Text('Durdur'),
-            onPressed: () {
-              player?.stop();
-            },
-          ),
-          FlatButton(
-            child: Text('Approve'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => TimerBloc(
           ticker: Ticker(),
-          duration: widget.prefs.getInt('isMinute') == 1500 ? min_25 : min_5),
+          duration: widget.prefs.getInt('isMinute') == 15 ? min_25 : min_5),
       child: Scaffold(
         key: _scaffoldStateKey,
         appBar: AppBar(
-          title: Text('Flutter Timer'),
+          title: Text('Odaklan!'),
           leading: IconButton(
             icon: Icon(Icons.menu, color: MyColors.grey_10),
             onPressed: () {
@@ -111,7 +77,7 @@ class _HomePageState extends State<HomePage> {
                         return Text(
                           '$minutesStr:$secondsStr',
                           style: TextStyle(
-                              color: widget.prefs.getInt('isMinute') != 1500
+                              color: widget.prefs.getInt('isMinute') != 15
                                   ? Theme.of(context).primaryColor
                                   : MyColors.yellowOwn,
                               fontSize: 96.0),
@@ -177,7 +143,7 @@ class _ActionsState extends State<Actions> {
               .add(EventReset(duration: widget.prefs.getInt('isMinute'))),
         ),
         FloatingActionButton.extended(
-            label: Text(widget.prefs.getInt('isMinute') == 1500
+            label: Text(widget.prefs.getInt('isMinute') == 15
                 ? "Fokuslan"
                 : "Mola Ver"),
             onPressed: () {
@@ -185,7 +151,7 @@ class _ActionsState extends State<Actions> {
                   .add(EventStarted(duration: widget.prefs.getInt('isMinute')));
               setState(() {
                 print(widget.prefs.getInt('isMinute').toString());
-                widget.prefs.getInt('isMinute') == 1500
+                widget.prefs.getInt('isMinute') == 15
                     ? widget.prefs.setInt('isMinute', min_5)
                     : widget.prefs.setInt('isMinute', min_25);
               });

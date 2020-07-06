@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:focus/widgets/my_dialog.dart';
+import 'package:focus/widgets/my_dialog_copy.dart';
 import 'package:flutter/material.dart';
 import 'package:focus/config/my_colors.dart';
 import 'package:focus/widgets/drawer.dart';

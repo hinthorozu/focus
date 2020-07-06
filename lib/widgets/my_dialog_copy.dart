@@ -3,17 +3,17 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:focus/config/my_colors.dart';
 import 'package:focus/widgets/my_text.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MyDialog extends StatefulWidget {
-  final SharedPreferences prefs;
-  MyDialog({Key key, @required this.prefs}) : super(key: key);
+  final bool is25Minute;
+  MyDialog({Key key, @required this.is25Minute}) : super(key: key);
 
   @override
   _MyDialogState createState() => _MyDialogState();
 }
 
 class _MyDialogState extends State<MyDialog> {
+  bool is25Minute = false;
   static AudioCache cache = new AudioCache();
   static AudioPlayer player = AudioPlayer();
   void _playFile(String pomodorobreakStart) async {
@@ -22,7 +22,8 @@ class _MyDialogState extends State<MyDialog> {
 
   @override
   Widget build(BuildContext context) {
-    _playFile(widget.prefs.getInt('isMinute') == 15
+    is25Minute = widget.is25Minute;
+    _playFile(is25Minute
         ? "sound/pomodoro_break_start.mp3"
         : "sound/pomodoro_break_finish.mp3");
     return Dialog(
@@ -40,7 +41,7 @@ class _MyDialogState extends State<MyDialog> {
               Container(
                 padding: EdgeInsets.all(20),
                 width: double.infinity,
-                color: widget.prefs.getInt('isMinute') == 15
+                color: is25Minute
                     ? Color(0xFFfdd55c)
                     : Theme.of(context).primaryColor,
                 child: Column(
@@ -48,10 +49,7 @@ class _MyDialogState extends State<MyDialog> {
                     Container(height: 10),
                     Icon(Icons.verified_user, color: Colors.white, size: 80),
                     Container(height: 10),
-                    Text(
-                        widget.prefs.getInt('isMinute') == 15
-                            ? "Biraz Dinlenme Zamanı"
-                            : "Konsantre Ol!",
+                    Text(is25Minute ? "Biraz Dinlenme Zamanı" : "Konsantre Ol!",
                         style: MyText.title(context)
                             .copyWith(color: Colors.white)),
                     Container(height: 10),
@@ -70,21 +68,15 @@ class _MyDialogState extends State<MyDialog> {
                       shape: RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(18.0)),
                       child: Text(
-                        widget.prefs.getInt('isMinute') == 15
-                            ? "Bunu Hakettin :) "
-                            : "Devam Et",
+                        is25Minute ? "Bunu Hakettin :) " : "Devam Et",
                         style: TextStyle(color: Colors.white),
                       ),
-                      color: widget.prefs.getInt('isMinute') == 15
+                      color: is25Minute
                           ? MyColors.yellowOwn
                           : Theme.of(context).primaryColor,
                       onPressed: () {
                         player?.stop();
-                        Navigator.pop(
-                            context,
-                            widget.prefs.getInt('isMinute') == 15
-                                ? false
-                                : true);
+                        Navigator.pop(context, is25Minute ? false : true);
                       },
                     ),
                   ],
