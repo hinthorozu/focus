@@ -12,24 +12,26 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  final SharedPreferences sharedPreferences =
+      await SharedPreferences.getInstance();
+  // SharedPreferences.getInstance().then((prefs) {
+  //   runApp(MaterialApp(
+  //       debugShowCheckedModeBanner: false,
+  //       theme: myTheme,
+  //       home: SplashScreen(),
+  //       routes: {
+  //         '/home': (BuildContext context) => new HomePage(prefs: prefs),
+  //       }));
+  // });
 
   runApp(MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: myTheme,
       home: SplashScreen(),
       routes: {
-        '/home': (BuildContext context) => new HomePage(),
+        '/home': (BuildContext context) =>
+            new HomePage(prefs: sharedPreferences),
       }));
-
-  SharedPreferences.getInstance().then((prefs) {
-    runApp(MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: myTheme,
-        home: SplashScreen(),
-        routes: {
-          '/home': (BuildContext context) => new HomePage(prefs: prefs),
-        }));
-  });
 }
 
 class SplashScreen extends StatefulWidget {
